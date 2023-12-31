@@ -138,5 +138,3 @@ const getCountryData = function (country) {
 btn.addEventListener('click', () => {
   getCountryData('portugal');
 });
-
-getCountryData('sdf');
