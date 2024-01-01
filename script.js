@@ -111,19 +111,32 @@ getCountryAndNeighbour('usa');
 //     });
 // };
 
+const getJason = (url, errorMsg = 'something wrong') => {
+  return fetch(url).then(res => {
+    if (!res.ok) throw new Error(`${errorMsg} ${res.status}`);
+    return res.json();
+  });
+};
+
 const getCountryData = function (country) {
   //country 1
-  fetch(`https://restcountries.com/v3.1/name/${country}`)
-    .then(res => res.json())
+  getJason(
+    `https://restcountries.com/v3.1/name/${country}`,
+    'country not found'
+  )
     .then(data => {
       renderCountry(data[0]);
       const neighbour = data[0].borders[0];
 
-      if (!neighbour) return;
+      if (!neighbour) throw new Error(`no neighbour foundS`);
       // country 2
-      return fetch(`https://restcountries.com/v3.1/alpha?codes=${neighbour}`);
+
+      return getJason(
+        `https://restcountries.com/v3.1/alpha?codes=${neighbour}`,
+        'country not found'
+      );
     })
-    .then(res => res.json())
+
     .then(data => {
       renderCountry(data[0], 'neighbour');
     })
@@ -136,5 +149,5 @@ const getCountryData = function (country) {
 };
 
 btn.addEventListener('click', () => {
-  getCountryData('portugal');
+  getCountryData('australia');
 });
